@@ -1,7 +1,5 @@
 # CNAB Processor
 
-![Diagram](./Diagram.png)
-
 A CNAB file processing application built with **Spring Boot** and **Spring Batch**, with a **ReactJS frontend** for file upload and data visualization.
 
 This project was developed while following a learning series by Giuliana Bezerra, with additional improvements and adaptations.
@@ -62,4 +60,6 @@ This project was developed while following a learning series by Giuliana Bezerra
 This application was dockerized with docker!
 
 ```./start.sh```
+
+![Diagram](./Diagram.png)
 
