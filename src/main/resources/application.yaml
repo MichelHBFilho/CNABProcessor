@@ -1,3 +1,25 @@
 spring:
   application:
     name: CNABProcessorAPI
+  batch:
+    jdbc:
+      initialize-schema:always
+    job:
+      enabled: false
+  sql:
+    init:
+      mode: always
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    driver-class-name: org.postgresql.Driver
+    username: user
+    password: password
+  h2:
+    console:
+      enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    defer-datasource-initialization: true
+file:
+  upload-dir: tmp
