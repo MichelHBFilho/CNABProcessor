@@ -2,6 +2,7 @@ package com.michelfilho.cnabprocessorapi.config;
 
 import com.michelfilho.cnabprocessorapi.domain.CNABTransaction;
 import com.michelfilho.cnabprocessorapi.domain.Transaction;
+import com.michelfilho.cnabprocessorapi.domain.TransactionType;
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.StepScope;
@@ -104,6 +105,9 @@ public class BatchConfig {
     @Bean
     ItemProcessor<CNABTransaction, Transaction> processor() {
         return (CNABTransaction item) -> {
+            TransactionType type = TransactionType.findByType(item.type());
+            BigDecimal value = item.value()
+                    .multiply(type.getSignal());
             return new Transaction(
                     null,
                     item.type(),
@@ -112,9 +116,10 @@ public class BatchConfig {
                     item.cpf(),
                     item.card(),
                     null,
-                    item.storeOwner(),
-                    item.storeName()
+                    item.storeOwner().stripTrailing(),
+                    item.storeName().stripTrailing()
             )
+                    .withValue(value)
                     .withDate(item.date())
                     .withHour(item.hour());
         };
@@ -125,7 +130,7 @@ public class BatchConfig {
         return new JdbcBatchItemWriterBuilder<Transaction>()
                 .dataSource(dataSource)
                 .sql("""
-                        INSERT INTO transactions (
+                        INSERT INTO "transactions" (
                              "type", "date", "value", "cpf", "card", "hour", "store_owner", "store_name"
                          ) VALUES (
                              :type, :date, :value, :cpf, :card, :hour, :storeOwner, :storeName

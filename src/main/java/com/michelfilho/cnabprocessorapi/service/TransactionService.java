@@ -4,6 +4,8 @@ import com.michelfilho.cnabprocessorapi.domain.Transaction;
 import com.michelfilho.cnabprocessorapi.domain.TransactionReport;
 import com.michelfilho.cnabprocessorapi.domain.TransactionType;
 import com.michelfilho.cnabprocessorapi.repository.TransactionRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -27,10 +29,6 @@ public class TransactionService {
 
         transactions.forEach(transaction -> {
             String storeName = transaction.storeName();
-            var transactionType = TransactionType.findByType(transaction.type());
-
-            BigDecimal value = transaction.value()
-                    .multiply(transactionType.getSignal());
 
             reportMap.compute(storeName, (key, existingReport) -> {
                 TransactionReport report;
@@ -44,12 +42,29 @@ public class TransactionService {
                             new ArrayList<>()
                     );
                 return report
-                        .plusValue(value)
-                        .addTransaction(transaction.withValue(value));
+                        .plusValue(transaction.value())
+                        .addTransaction(transaction);
             });
         });
 
         return new ArrayList<>(reportMap.values());
+    }
+
+    public TransactionReport listByStoreName(String storeName, Pageable pageable) {
+        List<Transaction> transactions = repository.findAllByStoreName(storeName, pageable).getContent();
+
+        TransactionReport report = new TransactionReport(
+                storeName,
+                BigDecimal.ZERO,
+                new ArrayList<>()
+        );
+
+        for(Transaction t : transactions) {
+            report = report.plusValue(t.value())
+                    .addTransaction(t);
+        }
+
+        return report;
     }
 
 }

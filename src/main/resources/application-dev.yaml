@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: CNABProcessorAPI
+  batch:
+    jdbc:
+      initialize-schema:always
+    job:
+      enabled: false
+  sql:
+    init:
+      mode: always
+  datasource:
+    url: jdbc:h2:mem:cnab
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  h2:
+    console:
+      enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    defer-datasource-initialization: true
+file:
+  upload-dir: tmp
