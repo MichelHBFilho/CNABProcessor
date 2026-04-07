@@ -5,6 +5,7 @@ import com.michelfilho.cnabprocessorapi.domain.TransactionType;
 import com.michelfilho.cnabprocessorapi.service.TransactionService;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.RedisHash;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

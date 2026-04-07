@@ -4,6 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Time;
@@ -21,7 +22,7 @@ public record Transaction(
         @Column("hour") Time hour,
         @Column("store_owner") String storeOwner,
         @Column("store_name") String storeName
-) {
+) implements Serializable {
 
     public Transaction withDate(String dateString) throws ParseException {
         var dateFormat = new SimpleDateFormat("yyyyMMdd");

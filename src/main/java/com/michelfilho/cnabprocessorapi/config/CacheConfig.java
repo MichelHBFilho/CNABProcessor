@@ -1,14 +1,16 @@
 package com.michelfilho.cnabprocessorapi.config;
 
-import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.cache.RedisCacheManager;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 
 @Configuration
 public class CacheConfig {
+
     @Bean
-    public ConcurrentMapCacheManager cacheManager() {
-        return new ConcurrentMapCacheManager("report_daily");
+    public RedisCacheManager cacheManager(RedisConnectionFactory connectionFactory) {
+        return RedisCacheManager.create(connectionFactory);
     }
 
 }

@@ -1,3 +1,5 @@
 spring:
   profiles:
     active: ${SPRING_ACTIVE_PROFILE:dev}
+  cache:
+    type: redis
